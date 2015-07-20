@@ -1,4 +1,4 @@
-package org.mitre.idbs_demo;
+package org.mitre.idbs_demo.web;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

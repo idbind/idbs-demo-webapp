@@ -1,4 +1,4 @@
-package org.mitre.idbs_demo;
+package org.mitre.idbs_demo.config;
 
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter;
 import org.springframework.context.annotation.Configuration;
