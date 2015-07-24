@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+
+<body>
+	<nav th:replace="fragments/navbar :: navbar"></nav>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-4">
+				<div class="well" style="margin-top: 50px;">
+					<h2 class="text-center">Log In</h2>
+					<form th:action="@{/login}" method="post">
+						<div class="form-group">
+							<label for="inputUsername">Username:</label>
+							<input type="text" class="form-control" id="inputUsername" name="user" placeholder="User"/>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword">Password:</label>
+							<input type="password" class="form-control" id="inputPassword" name="pass" placeholder="password"/>
+						</div>
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<button type="submit" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

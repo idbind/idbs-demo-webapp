@@ -1,32 +1,36 @@
 <!DOCTYPE html>
-<html ng-app="idbsDemo" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="css/idbsDemo.css"/>
-	
-	<title>IdBS Demo App</title>
-</head>
+<html ng-app="idbsDemo" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+
 <body ng-controller="IdbsDemoController">
-	<h1 style="text-align:center">
-		IdBS Demo App
-	</h1>
+	
+	<div th:replace="fragments/navbar :: navbar"></div>
 	
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12 text-center">
-				<form>
-					<input type="text" value="http://localhost:8080/identity-binder/query" />
-					<button type="submit" class="btn btn-primary" ng-click="getResponse()">Get token</button>
-				</form>
+			<div class="col-sm-2">
+				<div class="well">
+					
+				</div>
+			</div>
+			<div class="col-sm-10">
+				<div class="well">
+					<div class="row">
+						<div class="col-sm-12 text-center">
+							<form>
+								<input type="text" value="http://localhost:8080/identity-binder/query" />
+								<button type="submit" class="btn btn-primary" ng-click="getResponse()">Get token</button>
+							</form>
+						</div>
+					</div>
+					<div class="row">
+						<pre>response = {{queryResponse | json}}</pre>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<pre>response = {{queryResponse | json}}</pre>
-		</div>
+			
 	</div>
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -36,16 +40,36 @@
 	<script>
 		angular.module('idbsDemo', [])
 			.controller('IdbsDemoController', ['$scope', '$http', function($scope, $http) {
+				$scope.authToken = '';
 				$scope.queryResponse = {};
+				$scope.esc = '%26';
+				
+				$scope.getToken = function() {
+					console.log('getting token...');
+					$http({method: 'POST',
+						   url: 'http://localhost:8080/openid-connect-server-webapp/token',
+						   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+						   //data: {client_id:'client',client_secret:'secret',grant_type:'client_credentials',scope:'org.mitre.idbind.query'}})
+						   data: 'client_id=client'+$scope.esc+'client_secret=secret'+$scope.esc+'grant_type=client_credentials'+$scope.esc+'scope=org.mitre.idbind.query'})
+					.success( function(res) {
+						$scope.authToken = res.access_token;
+						console.log(res);
+					})
+					.error( function(err) {
+						console.log(err);
+					});
+				}
 				
 				$scope.getResponse = function() {
+					$scope.getToken();
 					$http({method: 'POST',
 						   url: 'http://localhost:8080/identity-binder/query',
 						   headers: {'Content-Type': 'application/x-www-form-urlencoded',
 							         'Accept': 'application/json',
-							         'Authorization': 'Bearer eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJjbGllbnQiLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODA4MFwvb3BlbmlkLWNvbm5lY3Qtc2VydmVyLXdlYmFwcFwvIiwiZXhwIjoxNDM3NDI5OTgyLCJpYXQiOjE0Mzc0MjYzODIsImp0aSI6IjYwMGY0YTQ0LWM4YzctNDFiNC1hMWQ5LTU0OTUyNTA5MDYyMCJ9.jmbBRy3eG_BwFGFxUk8OiYvFT8DF-Po3WQPl7ipbagXDpsv9dgf-vVPKRAxzqT5xV3I2HZXWlBkECP63KeBqGy-KCmX0oDSchwTYW_4GYElun7A3joHiwjef0RW-8SOiJ9B1BFzCHBTrRecOZbOzKSAudPzjJ2wtbKP3eJzcA70'},
-						   data: 'subject=90342.ASDFJWFA'}).success( function(res) {
-					//$http.get('http://localhost:8080/identity-binder/query').success( function(res) {	
+							         'Authorization': 'Bearer ' + $scope.authToken},
+						   data: 'subject=90342.ASDFJWFA'})
+						   //params: {issuer: 'http://localhost:8080/openid-connect-server-webapp/', subject: '90342.ASDFJWFA'}})
+					.success( function(res) {
 						$scope.queryResponse = res;
 					});
 				}

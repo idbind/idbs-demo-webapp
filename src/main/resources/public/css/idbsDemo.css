@@ -1,0 +1,13 @@
+body {
+	background-color: #444;
+}
+
+.nav>li span {
+	position: relative;
+	display: block;
+	padding-top: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	line-height: 20px;
+	color: #9d9d9d;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head></head>
+
+<body>
+	<nav th:fragment="navbar" class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header pull-left">
+				<span class="navbar-brand">IdBS Demo App</span>
+			</div>
+			<ul class="nav navbar-nav navbar-right" sec:authorize="isAuthenticated()">
+				<li>
+					<span>Logged in as</span>
+				</li>
+				<li>
+					<span><strong sec:authentication="name"></strong></span>
+				</li>
+				<li>
+					<form class="navbar-form" th:action="@{/logout}" method="post">
+						<input type="submit" class="btn btn-link" value="Log Out"/>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</body>
+</html>
