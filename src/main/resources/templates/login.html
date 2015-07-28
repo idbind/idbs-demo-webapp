@@ -1,33 +1,80 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html ng-app="loginModule" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header"></head>
 
-<body>
+<body ng-controller="LoginCtrl">
 	<nav th:replace="fragments/navbar :: navbar"></nav>
 	
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-4">
 				<div class="well" style="margin-top: 50px;">
-					<h2 class="text-center">Log In</h2>
-					<form th:action="@{/login}" method="post">
-						<div class="form-group">
-							<label for="inputUsername">Username:</label>
-							<input type="text" class="form-control" id="inputUsername" name="user" placeholder="User"/>
-						</div>
-						<div class="form-group">
-							<label for="inputPassword">Password:</label>
-							<input type="password" class="form-control" id="inputPassword" name="pass" placeholder="password"/>
-						</div>
-						<div class="row">
+					<h2 class="text-center">{{register ? 'Register' : 'Log In'}}</h2>
+					<div ng-hide="register" class="container-fluid">	
+						<form th:action="@{/login}" method="post">
+							<div class="form-group">
+								<label for="inputUsername">Username:</label>
+								<input type="text" class="form-control" id="inputUsername" name="user" placeholder="User"/>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword">Password:</label>
+								<input type="password" class="form-control" id="inputPassword" name="pass" placeholder="password"/>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 text-center">
+									<button type="submit" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+								</div>
+							</div>
+						</form>
+						<div class="row" style="margin-top: 30px;">
 							<div class="col-sm-12 text-center">
-								<button type="submit" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+								<h4>New here? <a ng-click="showRegForm()">Register</a> now!</h4>
 							</div>
 						</div>
-					</form>
+					</div>
+					<div ng-show="register" class="container-fluid">
+						<form>
+							<div class="form-group">
+								<label for="inputUsername">Username:</label>
+								<input type="text" class="form-control" id="inputUsername" name="user" placeholder="User"/>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword">Password:</label>
+								<input type="password" class="form-control" id="inputPassword" name="pass" placeholder="password"/>
+							</div>
+							<div class="form-group">
+								<label for="reenterPassword">Reenter password:</label>
+								<input type="password" class="form-control" id="reenterPassword" placeholder="password"/>
+							</div>
+							<div class="row" style="margin-top: 30px;">
+								<div class="col-sm-6">
+									<button type="submit" class="btn btn-primary pull-right">Register</button>
+								</div>
+								<div class="col-sm-6">
+									<button ng-click="hideRegForm()" class="btn btn-danger">Cancel</button>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	<script src="https://code.angularjs.org/1.3.16/angular.min.js"></script>
+	
+	<script>
+		angular.module('loginModule', [])
+			.controller('LoginCtrl', function($scope) {
+				$scope.register = false;
+				$scope.showRegForm = function() {
+					$scope.register = true;
+				}
+				$scope.hideRegForm = function() {
+					$scope.register = false;
+				}
+			});
+	</script>
+
 </body>
 </html>

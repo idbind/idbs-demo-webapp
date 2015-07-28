@@ -40,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 		    .authorizeRequests()
 		    	.antMatchers("/home").permitAll();
+		http
+			.csrf().disable();
 	}
 	
 	@Autowired
@@ -55,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			@Override
 			public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 					Authentication authentication) throws IOException {
-				System.out.println("got here");
+				System.out.println("login succeeded");
 				RedirectStrategy strategy = new DefaultRedirectStrategy();
 				strategy.sendRedirect(request, response, "/home");
 			}
@@ -67,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new AuthenticationFailureHandler() {
 			@Override
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
-				System.out.println("failed");
+				System.out.println("login failed");
 			}
 		};
 	}
