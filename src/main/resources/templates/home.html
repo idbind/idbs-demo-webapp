@@ -18,10 +18,10 @@
 				<div class="well">
 					<div class="row">
 						<div class="col-sm-12 text-center">
-							<form ng-submit="getToken()">
+							<!-- <form ng-submit="getToken()"> -->
 								<!-- <input type="text" value="http://localhost:8080/identity-binder/query" /> -->
-								<button type="submit" class="btn btn-primary">Get token</button>
-							</form>
+								<button class="btn btn-primary" ng-click="getToken()">Get token</button>
+							<!-- </form> -->
 						</div>
 					</div>
 					<div class="row">
@@ -33,13 +33,20 @@
 			
 	</div>
 	
+	<!-- TODO: put this in separate file? -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<script src="https://code.angularjs.org/1.3.16/angular.min.js"></script>
 	
 	<script>
 		angular.module('idbsDemo', [])
+			.config(function($httpProvider) {
+				$httpProvider.defaults.transformRequest = [function(obj) {
+					return obj === undefined ? obj : $.param(obj);
+				}];
+			})
 			.controller('IdbsDemoController', ['$scope', '$http', function($scope, $http) {
+				
 				var authToken = '';
 				$scope.queryResponse = {};
 				
@@ -48,7 +55,7 @@
 					$http({method: 'POST',
 						   url: 'http://localhost:8080/openid-connect-server-webapp/token',
 						   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-						   params: { 'client_id': 'client', 'client_secret': 'secret', 'grant_type': 'client_credentials', 'scope': 'org.mitre.idbind.query'}})
+						   data: { 'client_id': 'client', 'client_secret': 'secret', 'grant_type': 'client_credentials', 'scope': 'org.mitre.idbind.query'}})
 					.success( function(res) {
 						authToken = res.access_token;
 						console.log(res.access_token);
@@ -60,16 +67,14 @@
 				}
 				
 				var getResponse = function() {
-					//$scope.getToken();
-					var authString = 'Bearer eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJjbGllbnQiLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODA4MFwvb3BlbmlkLWNvbm5lY3Qtc2VydmVyLXdlYmFwcFwvIiwiZXhwIjoxNDM4MTAwMzI3LCJpYXQiOjE0MzgwOTY3MjcsImp0aSI6IjJmNGIwZjAzLTNmOTAtNDg5NC1hODE4LTczOGYxN2M0ZGY3MSJ9.bHq16FjZ3sVHAXvGO8-X1lT6RPYmedQlds-qKxNoEkDqa-6EA_bsykmzNw0aSKYBciIQPKWEIVH-03h2TOaqTOPTMwCR9oRqwtdZHJK4cGsMA3Pihl9egzHE0-L6W4tiT-9cBM1D1mbOU9vnuID4gMp8kZJ9T2GYyLCYKxFyfF0';
-					//var authString = 'Bearer '+authToken;
+					var authString = 'Bearer '+authToken;
 					console.log(authString);
 					$http({method: 'POST',
 						   url: 'http://localhost:8080/identity-binder/query',
 						   headers: {'Content-Type': 'application/x-www-form-urlencoded',
 							         'Accept': 'application/json',
 							         'Authorization': authString },
-						   params: { 'issuer': 'http://localhost:8080/openid-connect-server-webapp/', 'subject': '90342.ASDFJWFA'}})
+						   data: {'issuer':'http://localhost:8080/openid-connect-server-webapp/','subject':'90342.ASDFJWFA'}})
 					.success( function(res) {
 						$scope.queryResponse = res;
 					});
