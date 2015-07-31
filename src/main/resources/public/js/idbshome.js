@@ -1,7 +1,16 @@
 angular.module('idbsDemo', [])
 	.config(function($httpProvider) {
 		$httpProvider.defaults.transformRequest = [function(obj) {
-			return obj === undefined ? obj : $.param(obj);
+			//return obj === undefined ? obj : $.param(obj);
+			var query = '';
+			var name, value;
+			for(name in obj) {
+				value = obj[name];
+				
+				if(value !== undefined && value !== null)
+					query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+			}
+			return query.length ? query.substr(0, query.length-1) : query;
 		}];
 	})
 	.controller('IdbsDemoController', ['$scope', '$http', function($scope, $http) {
@@ -37,5 +46,20 @@ angular.module('idbsDemo', [])
 			.success( function(res) {
 				$scope.queryResponse = res;
 			});
+		}
+		
+		/*************************************/
+		
+		$scope.getTokenSpringWay = function() {
+			$http({method: 'GET',
+				   url: 'http://localhost:8080/idbs-demo-webapp/getToken'})
+			.success( function(res) {
+				authToken = res.accessToken;
+				console.log(res);
+				getResponse();
+			})
+			.error( function(err) {
+				console.log(err);
+			})
 		}
 	}]);
