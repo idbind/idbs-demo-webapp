@@ -3,6 +3,7 @@ package org.mitre.idbs_demo.model;
 import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @SuppressWarnings("unused")
@@ -13,7 +14,7 @@ public class TokenResponse {
 	
 	public TokenResponse() {}
 	
-	public TokenResponse(String accessToken, String tokenType) {
+	public TokenResponse(@JsonProperty("access_token") String accessToken, @JsonProperty("token_type") String tokenType) {
 		this.accessToken = accessToken;
 		this.tokenType = tokenType;
 	}

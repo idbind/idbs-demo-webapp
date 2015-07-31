@@ -25,6 +25,7 @@ public class HomeController {
 	@RequestMapping(value = "/getToken", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public TokenResponse getAuthorizationToken() {
 		
+		//TODO: Where do these arguments come from?
 		return tokenService.getAuthToken("client", "secret", "client_credentials", "org.mitre.idbind.query");
 	}
 }

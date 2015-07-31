@@ -15,10 +15,11 @@ angular.module('idbsDemo', [])
 	})
 	.controller('IdbsDemoController', ['$scope', '$http', function($scope, $http) {
 		
-		var authToken = '';
+		//var authToken = '';
+		var tokenResponse = {};
 		$scope.queryResponse = {};
 		
-		$scope.getToken = function() {
+		/*$scope.getToken = function() {
 			console.log('getting token...');
 			$http({method: 'POST',
 				   url: 'http://localhost:8080/openid-connect-server-webapp/token',
@@ -32,10 +33,10 @@ angular.module('idbsDemo', [])
 			.error( function(err) {
 				console.log(err);
 			});
-		}
+		}*/
 		
 		var getResponse = function() {
-			var authString = 'Bearer '+authToken;
+			var authString = tokenResponse.tokenType + ' ' + tokenResponse.accessToken;
 			console.log(authString);
 			$http({method: 'POST',
 				   url: 'http://localhost:8080/identity-binder/query',
@@ -54,7 +55,8 @@ angular.module('idbsDemo', [])
 			$http({method: 'GET',
 				   url: 'http://localhost:8080/idbs-demo-webapp/getToken'})
 			.success( function(res) {
-				authToken = res.accessToken;
+				//authToken = res.accessToken;
+				tokenResponse = res;
 				console.log(res);
 				getResponse();
 			})
