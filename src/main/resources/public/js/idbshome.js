@@ -15,50 +15,28 @@ angular.module('idbsDemo', [])
 	})
 	.controller('IdbsDemoController', ['$scope', '$http', function($scope, $http) {
 		
-		//var authToken = '';
 		var tokenResponse = {};
-		$scope.queryResponse = {};
+		$scope.queryResponse = [];
 		
-		/*$scope.getToken = function() {
-			console.log('getting token...');
-			$http({method: 'POST',
-				   url: 'http://localhost:8080/openid-connect-server-webapp/token',
-				   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				   data: { 'client_id': 'client', 'client_secret': 'secret', 'grant_type': 'client_credentials', 'scope': 'org.mitre.idbind.query'}})
+		$scope.getToken = function() {
+			$http({method: 'GET',
+				   url: 'http://localhost:8080/idbs-demo-webapp/getToken'})
 			.success( function(res) {
-				authToken = res.access_token;
-				console.log(res.access_token);
+				tokenResponse = res;
+				console.log(res);
 				getResponse();
 			})
 			.error( function(err) {
 				console.log(err);
-			});
-		}*/
-		
-		var getResponse = function() {
-			var authString = tokenResponse.tokenType + ' ' + tokenResponse.accessToken;
-			console.log(authString);
-			$http({method: 'POST',
-				   url: 'http://localhost:8080/identity-binder/query',
-				   headers: {'Content-Type': 'application/x-www-form-urlencoded',
-					         'Accept': 'application/json',
-					         'Authorization': authString },
-				   data: {'issuer':'http://localhost:8080/openid-connect-server-webapp/','subject':'90342.ASDFJWFA'}})
-			.success( function(res) {
-				$scope.queryResponse = res;
-			});
+			})
 		}
 		
-		/*************************************/
-		
-		$scope.getTokenSpringWay = function() {
+		var getResponse = function() {
 			$http({method: 'GET',
-				   url: 'http://localhost:8080/idbs-demo-webapp/getToken'})
+				   url: 'http://localhost:8080/idbs-demo-webapp/getIdentities'})
 			.success( function(res) {
-				//authToken = res.accessToken;
-				tokenResponse = res;
 				console.log(res);
-				getResponse();
+				$scope.queryResponse = res;
 			})
 			.error( function(err) {
 				console.log(err);
