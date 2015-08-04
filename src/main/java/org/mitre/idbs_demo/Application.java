@@ -27,7 +27,8 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
     public static PropertyPlaceholderConfigurer properties() {
     	PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
-    	ClassPathResource[] resources = new ClassPathResource[] { new ClassPathResource("application.properties") };
+    	ClassPathResource[] resources = new ClassPathResource[] { new ClassPathResource("application.properties"),
+    															  new ClassPathResource("websecurity.properties")};
     	ppc.setLocations(resources);
     	ppc.setIgnoreUnresolvablePlaceholders(true);
     	return ppc;

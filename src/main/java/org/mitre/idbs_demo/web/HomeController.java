@@ -19,19 +19,15 @@ public class HomeController {
 	
 	@Value( "${client.id}" )
 	private String clientId;
-	
 	@Value( "${client.secret}" )
 	private String clientSecret;
-	
 	@Value( "${client.grantType}" )
 	private String clientGrant;
-	
 	@Value( "${client.scope}" )
 	private String clientScope;
 	
 	@Value( "${idbsQuery.issuer}" )
 	private String issuer;
-	
 	@Value( "${idbsQuery.subject}" )
 	private String subject;
 	

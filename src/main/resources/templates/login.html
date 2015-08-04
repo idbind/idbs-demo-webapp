@@ -10,7 +10,7 @@
 			<div class="col-sm-4 col-sm-offset-4">
 				<div class="well" style="margin-top: 50px;">
 					<h2 class="text-center">{{register ? 'Register' : 'Log In'}}</h2>
-					<div ng-hide="register" class="container-fluid">	
+					<!-- <div ng-hide="register" class="container-fluid">	
 						<form th:action="@{/login}" method="post">
 							<div class="form-group">
 								<label for="inputUsername">Username:</label>
@@ -55,7 +55,11 @@
 								</div>
 							</div>
 						</form>
-					</div>
+					</div> -->
+					<form name="identifier_form" action="openid_connect_login" method="get">
+						<input type="text" style="display: none;" name="identifier" id="identifier" value="http://localhost:8080/openid-connect-server-webapp/"/>
+						<button type="submit" id="login-button" class="btn btn-primary long-button">Log In</button>
+					</form>
 				</div>
 			</div>
 		</div>

@@ -10,6 +10,7 @@
   	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<start-class>org.mitre.idbs_demo.Application</start-class>
+		<mitreid-connect.version>1.2.0-SNAPSHOT</mitreid-connect.version>
 	</properties>
   	
   	<parent>
@@ -66,6 +67,11 @@
 			<artifactId>lombok</artifactId>
 			<version>1.16.2</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mitre</groupId>
+			<artifactId>openid-connect-client</artifactId>
+			<version>${mitreid-connect.version}</version>
 		</dependency>
   	</dependencies>
   	

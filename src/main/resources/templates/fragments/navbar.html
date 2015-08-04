@@ -14,7 +14,7 @@
 					<span>Logged in as</span>
 				</li>
 				<li>
-					<span><strong sec:authentication="name"></strong></span>
+					<span><strong sec:authentication="userInfo.name"></strong></span>
 				</li>
 				<li>
 					<form class="navbar-form" th:action="@{/logout}" method="post">
