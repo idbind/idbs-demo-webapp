@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-<html ng-app="loginModule" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html ng-app="loginModule" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments/header :: header"></head>
 
 <body ng-controller="LoginCtrl">
-	<nav th:replace="fragments/navbar :: navbar"></nav>
+	
+	<!-- <nav th:replace="fragments/navbar :: navbar"></nav> -->
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header pull-left">
+				<span class="navbar-brand">IdBS Demo App</span>
+			</div>
+			<!-- <ul class="nav navbar-nav navbar-right" sec:authorize="isAuthenticated()">
+				<li>
+					<span>Logged in as</span>
+				</li>
+				<li>
+					<span><strong>{{ userInfo.name }}</strong></span>
+				</li>
+				<li>
+					<form class="navbar-form" th:action="@{/logout}" method="post">
+						<input type="submit" class="btn btn-link" value="Log Out"/>
+					</form>
+				</li>
+			</ul> -->
+		</div>
+	</nav>
 	
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-4">
 				<div class="well" style="margin-top: 50px;">
-					<h2 class="text-center">{{register ? 'Register' : 'Log In'}}</h2>
+					<h2 class="text-center">Log In</h2>
 					<!-- <div ng-hide="register" class="container-fluid">	
 						<form th:action="@{/login}" method="post">
 							<div class="form-group">

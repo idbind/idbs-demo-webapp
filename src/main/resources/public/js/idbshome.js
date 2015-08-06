@@ -13,10 +13,28 @@ angular.module('idbsDemo', [])
 			return query.length ? query.substr(0, query.length-1) : query;
 		}];
 	})
-	.controller('IdbsDemoController', ['$scope', '$http', function($scope, $http) {
+	.service('UserInfoService', ['$http', function($http) {	
+		this.getUserInfo = function() {
+			var info = {};
+			
+			$http({method: 'GET',
+				   url: 'http://localhost:8080/idbs-demo-webapp/getUserInfo'})
+				.success( function(res) {
+					console.log(res);
+					info = res;
+				})
+				.error( function(err) {
+					console.log(err);
+				});
+			
+			return info;
+		}
+	}])
+	.controller('IdbsDemoController', ['$scope', '$http', 'UserInfoService', function($scope, $http, UserInfoService) {
 		
 		var tokenResponse = {};
-		$scope.queryResponse = [];
+		$scope.identities = [];
+		$scope.userInfo = {};
 		
 		$scope.getToken = function() {
 			$http({method: 'GET',
@@ -36,7 +54,8 @@ angular.module('idbsDemo', [])
 				   url: 'http://localhost:8080/idbs-demo-webapp/getIdentities'})
 			.success( function(res) {
 				console.log(res);
-				$scope.queryResponse = res;
+				$scope.identities = res;
+				$scope.userInfo = UserInfoService.getUserInfo();
 			})
 			.error( function(err) {
 				console.log(err);

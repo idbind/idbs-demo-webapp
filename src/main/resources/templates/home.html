@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html ng-app="idbsDemo" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments/header :: header"></head>
 
 <body ng-controller="IdbsDemoController">
 	
-	<div th:replace="fragments/navbar :: navbar"></div>
+	<!-- <div th:replace="fragments/navbar :: navbar"></div> -->
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header pull-left">
+				<span class="navbar-brand">IdBS Demo App</span>
+			</div>
+			<ul class="nav navbar-nav navbar-right" sec:authorize="isAuthenticated()">
+				<li>
+					<span>Logged in as</span>
+				</li>
+				<li>
+					<span><strong>{{ userInfo.name }}</strong></span>
+				</li>
+				<li>
+					<form class="navbar-form" th:action="@{/logout}" method="post">
+						<input type="submit" class="btn btn-link" value="Log Out"/>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
 	
 	<div class="container-fluid">
 		<div class="row">
@@ -20,12 +40,25 @@
 						<div class="col-sm-12 text-center">
 							<!-- <form ng-submit="getToken()"> -->
 								<!-- <input type="text" value="http://localhost:8080/identity-binder/query" /> -->
-								<button class="btn btn-primary" ng-click="getToken()">Get token</button>
+								<button class="btn btn-primary" ng-click="getToken()">Get identities</button>
 							<!-- </form> -->
 						</div>
 					</div>
-					<div class="row">
-						<pre>response = {{queryResponse | json}}</pre>
+					<div ng-show="identities.length" class="row">
+						<div class="col-sm-12">
+							<table class="table table-striped">
+								<thead></thead>
+								<tbody>
+									<tr ng-repeat="i in identities">
+										<td>
+											<h3 class="text-primary">{{i.subject}}</h3>
+											<h4>{{i.issuer}}</h4>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- <pre>response = {{queryResponse | json}}</pre> -->
 					</div>
 				</div>
 			</div>

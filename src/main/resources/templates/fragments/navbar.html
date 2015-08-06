@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html ng-app="idbsDemo" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head></head>
 
-<body>
+<body ng-controller="IdbsDemoController">
 	<nav th:fragment="navbar" class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header pull-left">
@@ -14,7 +14,7 @@
 					<span>Logged in as</span>
 				</li>
 				<li>
-					<span><strong sec:authentication="userInfo.name"></strong></span>
+					<span><strong>{{ userInfo.name }}</strong></span>
 				</li>
 				<li>
 					<form class="navbar-form" th:action="@{/logout}" method="post">
