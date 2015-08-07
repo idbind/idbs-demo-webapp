@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.and()
 		    .authorizeRequests()
-		    	.antMatchers("/home", "/getToken").permitAll()
+		    	.antMatchers("/home"/*, "/getToken"*/).permitAll()
 		    	.and()
 		    .addFilterBefore(openIdConnectAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class);
 		http

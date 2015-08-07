@@ -1,4 +1,4 @@
-angular.module('idbsDemo', [])
+ var idbsDemo = angular.module('idbsDemo', [])
 	.config(function($httpProvider) {
 		$httpProvider.defaults.transformRequest = [function(obj) {
 			//return obj === undefined ? obj : $.param(obj);
@@ -13,28 +13,35 @@ angular.module('idbsDemo', [])
 			return query.length ? query.substr(0, query.length-1) : query;
 		}];
 	})
-	.service('UserInfoService', ['$http', function($http) {	
-		this.getUserInfo = function() {
-			var info = {};
-			
-			$http({method: 'GET',
-				   url: 'http://localhost:8080/idbs-demo-webapp/getUserInfo'})
-				.success( function(res) {
-					console.log(res);
-					info = res;
-				})
-				.error( function(err) {
-					console.log(err);
-				});
-			
-			return info;
+	/*.factory('UserInfoService', ['$http', function($http) {	
+		var promise;
+		var service = {
+			getUserInfo: function() {
+				if(!promise) {
+					promise = $http({method: 'GET',
+						   			 url: 'http://localhost:8080/idbs-demo-webapp/getUserInfo'})
+						   	  .then( function(res) {
+						   		  console.log(res);
+						   		  return res.data;
+						   	  });
+				}
+				return promise;
+			}
 		}
-	}])
+		return service;
+	}])*/
 	.controller('IdbsDemoController', ['$scope', '$http', 'UserInfoService', function($scope, $http, UserInfoService) {
 		
 		var tokenResponse = {};
 		$scope.identities = [];
 		$scope.userInfo = {};
+		
+		var updateUserInfo = function() {
+			UserInfoService.getUserInfo().then( function(info) {
+				$scope.userInfo = info;
+			});
+		}
+		updateUserInfo();
 		
 		$scope.getToken = function() {
 			$http({method: 'GET',
@@ -55,7 +62,7 @@ angular.module('idbsDemo', [])
 			.success( function(res) {
 				console.log(res);
 				$scope.identities = res;
-				$scope.userInfo = UserInfoService.getUserInfo();
+				//$scope.userInfo = UserInfoService.getUserInfo();
 			})
 			.error( function(err) {
 				console.log(err);
