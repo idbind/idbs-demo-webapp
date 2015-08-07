@@ -95,8 +95,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/login")
 				.defaultSuccessUrl("/home", true)
 				.successHandler(successHandler())
-				.usernameParameter("user")
-				.passwordParameter("pass")
 				.failureUrl("/login")
 				.failureHandler(failureHandler())
 				.permitAll()
@@ -106,6 +104,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 		    .authorizeRequests()
 		    	.antMatchers("/home"/*, "/getToken"*/).permitAll()
+		    	.and()
+		    .authorizeRequests().anyRequest().authenticated()
 		    	.and()
 		    .addFilterBefore(openIdConnectAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class);
 		http
