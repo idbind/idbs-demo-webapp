@@ -13,32 +13,15 @@
 			return query.length ? query.substr(0, query.length-1) : query;
 		}];
 	})
-	/*.factory('UserInfoService', ['$http', function($http) {	
-		var promise;
-		var service = {
-			getUserInfo: function() {
-				if(!promise) {
-					promise = $http({method: 'GET',
-						   			 url: 'http://localhost:8080/idbs-demo-webapp/getUserInfo'})
-						   	  .then( function(res) {
-						   		  console.log(res);
-						   		  return res.data;
-						   	  });
-				}
-				return promise;
-			}
-		}
-		return service;
-	}])*/
 	.controller('IdbsDemoController', ['$scope', '$http', 'UserInfoService', function($scope, $http, UserInfoService) {
 		
 		var tokenResponse = {};
 		$scope.identities = [];
-		$scope.userInfo = {};
+		$scope.userInfo = null;
 		
 		var updateUserInfo = function() {
 			UserInfoService.getUserInfo().then( function(info) {
-				$scope.userInfo = info;
+				$scope.userInfo = ((typeof info === 'object' && info !== null) ? info : null);
 			});
 		}
 		updateUserInfo();

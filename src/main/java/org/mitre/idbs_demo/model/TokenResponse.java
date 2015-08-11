@@ -1,12 +1,9 @@
 package org.mitre.idbs_demo.model;
 
-import lombok.Data;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@SuppressWarnings("unused")
 public class TokenResponse {
 	
 	private String accessToken;

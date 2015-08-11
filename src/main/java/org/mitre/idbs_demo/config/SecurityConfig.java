@@ -1,18 +1,14 @@
 package org.mitre.idbs_demo.config;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.mitre.jose.keystore.JWKSetKeyStore;
 import org.mitre.jwt.signer.service.impl.DefaultJWTSigningAndValidationService;
 import org.mitre.jwt.signer.service.impl.JWKSetCacheService;
-import org.mitre.oauth2.model.RegisteredClient;
 import org.mitre.oauth2.model.ClientDetailsEntity.AuthMethod;
+import org.mitre.oauth2.model.RegisteredClient;
 import org.mitre.openid.connect.client.OIDCAuthenticationFilter;
 import org.mitre.openid.connect.client.OIDCAuthenticationProvider;
 import org.mitre.openid.connect.client.service.impl.DynamicRegistrationClientConfigurationService;
@@ -21,7 +17,6 @@ import org.mitre.openid.connect.client.service.impl.HybridIssuerService;
 import org.mitre.openid.connect.client.service.impl.PlainAuthRequestUrlBuilder;
 import org.mitre.openid.connect.client.service.impl.StaticAuthRequestOptionsService;
 import org.mitre.openid.connect.client.service.impl.StaticClientConfigurationService;
-import org.mitre.openid.connect.web.UserInfoInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,12 +26,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
@@ -92,32 +81,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.formLogin()
-				.loginPage("/login")
-				.defaultSuccessUrl("/home", true)
-				.successHandler(successHandler())
-				.usernameParameter("user")
-				.passwordParameter("pass")
-				.failureUrl("/login")
-				.failureHandler(failureHandler())
+				.loginPage("/resources/public/login.html")
 				.permitAll()
 				.and()
 				.logout()
+				.logoutSuccessUrl("/login")
 				.permitAll()
 				.and()
 		    .authorizeRequests()
-		    	.antMatchers("/home"/*, "/getToken"*/).permitAll()
+		    	.antMatchers("/","/home","/login","/resources/public/**","/resources/css/**","/resources/js/**").permitAll()
+		    	.and()
+		    .authorizeRequests()
+		    	.anyRequest().authenticated()
 		    	.and()
 		    .addFilterBefore(openIdConnectAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class);
 		http
 			.csrf().disable();
 	}
-	
-	/*@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-		 .withUser("user").password("password").authorities("ROLE_USER").and()
-		 .withUser("admin").password("password").authorities("ROLE_ADMIN", "ROLE_USER");
-	}*/
 	
 	@Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -247,28 +227,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		signerService.setDefaultSigningAlgorithmName(defaultAlgorithm);
 		
 		return signerService;
-	}
-	
-	@Bean
-	public AuthenticationSuccessHandler successHandler() {
-		return new AuthenticationSuccessHandler() {
-			@Override
-			public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-					Authentication authentication) throws IOException {
-				System.out.println("login succeeded");
-				RedirectStrategy strategy = new DefaultRedirectStrategy();
-				strategy.sendRedirect(request, response, "/home");
-			}
-		};
-	}
-	
-	@Bean
-	public AuthenticationFailureHandler failureHandler() {
-		return new AuthenticationFailureHandler() {
-			@Override
-			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
-				System.out.println("login failed");
-			}
-		};
 	}
 }

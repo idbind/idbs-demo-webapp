@@ -1,0 +1,25 @@
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header pull-left">
+			<span class="navbar-brand">IdBS Demo App</span>
+		</div>
+		<ul class="nav navbar-nav navbar-right" ng-show="userInfo">
+			<li>
+				<span>Logged in as</span>
+			</li>
+			<li>
+				<span><strong>{{ userInfo.name }}</strong></span>
+			</li>
+			<li>
+				<form class="navbar-form" action="logout" method="post">
+					<input type="submit" class="btn btn-link" value="Log Out"/>
+				</form>
+			</li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right" ng-hide="userInfo">
+			<li>
+				<a href="http://localhost:8080/idbs-demo-webapp/login" class="btn btn-link">Log In</a>
+			</li>
+		</ul>
+	</div>
+</nav>
