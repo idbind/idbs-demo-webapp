@@ -11,3 +11,11 @@ body {
 	line-height: 20px;
 	color: #9d9d9d;
 }
+
+.sidepanel-glyph {
+	padding-right: 10px;
+}
+
+.sidepanel-link {
+	cursor: pointer;
+}

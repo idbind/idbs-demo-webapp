@@ -4,13 +4,18 @@ import java.util.Arrays;
 
 import org.mitre.idbs_demo.model.Identity;
 import org.mitre.idbs_demo.model.TokenResponse;
+import org.mitre.idbs_demo.model.User;
 import org.mitre.idbs_demo.repository.TokenRepository;
+import org.mitre.idbs_demo.repository.UserRepository;
+import org.mitre.openid.connect.model.OIDCAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -31,7 +36,7 @@ public class BoundIdentityService {
 	@Value( "${idbsQueryParams.subject}" )
 	private String subjectParam;
 	
-	public Identity[] getIdentities(String issuer, String subject) {
+	public Identity[] getIdentities() {
 		
 		TokenResponse authToken = TokenRepository.getInstance().retrieveToken(tokenKey);
 		
@@ -40,9 +45,11 @@ public class BoundIdentityService {
 		requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		requestHeaders.add("Authorization", authToken.toString());
 		
+		User currentUser = UserRepository.getInstance().getCurrentUser();
+		
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-		params.add(issuerParam, issuer);
-		params.add(subjectParam, subject);
+		params.add(issuerParam, currentUser.getIssuer());
+		params.add(subjectParam, currentUser.getSubject());
 		
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(params, requestHeaders);
 		

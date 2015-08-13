@@ -1,5 +1,7 @@
 package org.mitre.idbs_demo.service;
 
+import org.mitre.idbs_demo.model.User;
+import org.mitre.idbs_demo.repository.UserRepository;
 import org.mitre.openid.connect.client.UserInfoFetcher;
 import org.mitre.openid.connect.client.service.impl.DynamicServerConfigurationService;
 import org.mitre.openid.connect.config.ServerConfiguration;
@@ -19,11 +21,13 @@ public class UserInfoService {
 	
 	private UserInfoFetcher fetcher = new UserInfoFetcher();
 	
+	private UserRepository repo = UserRepository.getInstance();
+	
 	public UserInfo getUserInfo() {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
-		System.out.println("debug - "+authentication.toString());
+		System.out.println("debug-"+authentication.toString());
 		
 		if(authentication == null || !(authentication instanceof OIDCAuthenticationToken)) return null;
 		else {
@@ -36,6 +40,20 @@ public class UserInfoService {
 			
 			UserInfo info = fetcher.loadUserInfo(newToken);
 			info.setSource(null);
+			
+			User u = repo.addUser(token.getSub(), token.getIssuer(), info);
+			
+			/* TEST DATA */
+			if( u.getUserInfo().getName().equals("Demo User") ) {
+				u.addResource("Demo User test 1");
+				u.addResource("Demo User test 2");
+			}
+			else {
+				u.addResource("Demo Admin test 1");
+				u.addResource("Demo Admin test 2");
+			}
+			
+			repo.setCurrentUser(u);
 			return info;
 		}
 	}

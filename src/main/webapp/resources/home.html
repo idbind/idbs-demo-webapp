@@ -19,11 +19,18 @@
 		<div class="row">
 			<div class="col-sm-2">
 				<div class="well">
-					
+					<h4>
+						<span class="glyphicon glyphicon-user sidepanel-glyph"></span><a ng-click="changePanel('identities')" class="btn-link sidepanel-link">Identities</a>
+						<span class="badge pull-right">2</span>
+					</h4>
+					<h4>
+						<span class="glyphicon glyphicon-picture sidepanel-glyph"></span><a ng-click="changePanel('photos')" class="btn-link sidepanel-link">Photos</a>
+						<span class="badge pull-right">4</span>
+					</h4>
 				</div>
 			</div>
 			<div class="col-sm-10">
-				<div ng-show="userInfo" class="well">
+				<div ng-show="userInfo && panel == 'identities'" class="well">
 					<h2>Welcome, {{userInfo.name}}!</h2>
 					<h4>Click the button below to reveal your associated identities.</h4>
 					<div class="row">
@@ -47,6 +54,47 @@
 						</div>
 					</div>
 				</div>
+				
+				<div ng-show="userInfo && panel == 'photos'" class="well">
+					<h2>Your Photos<a ng-click="addPhoto(true)" class="btn pull-right"><span class="glyphicon glyphicon-plus"></span></a></h2>
+					<div ng-show="addphoto" class="row">
+						<div class="col-sm-6 col-sm-offset-3">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4>Add a photo</h4>
+								</div>
+								<div class="panel-body">
+									<form class="form-horizontal" name="addPhotoForm" action="/idbs-demo-webapp/addPhoto" method="post" ng-submit="getUserResources()">
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="photoUrlInput">URL:</label>
+											<div class="col-sm-10">
+												<input name="url" type="url" class="form-control" id="photoUrlInput" placeholder="Photo URL">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="photoCaptionInput">Caption:</label>
+											<div class="col-sm-10">
+												<input name="caption" type="text" class="form-control" id="photoCaptionInput" placeholder="Caption">
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-2">
+												<button type="submit" class="btn btn-success" ng-disabled="addPhotoForm.$invalid">Add</button>
+											</div>
+											<div class="col-sm-1">
+												<button type="button" ng-click="addPhoto(false)" class="btn btn-danger">Cancel</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" ng-repeat="r in resources">
+						<h4>{{r}}</h4>
+					</div>
+				</div>
+				
 				<div ng-hide="userInfo" class='well'>
 					<div class="row">
 						<div class="col-sm-12">
@@ -60,9 +108,6 @@
 			
 	</div>
 	
-	<!-- TODO: put this in separate file? -->
-	<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
-	<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
 	<script src="https://code.angularjs.org/1.3.16/angular.min.js"></script>
 	
 	<script src="resources/js/main.js"></script>

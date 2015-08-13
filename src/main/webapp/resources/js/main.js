@@ -18,13 +18,34 @@
 		var tokenResponse = {};
 		$scope.identities = [];
 		$scope.userInfo = null;
+		$scope.resources = [];
+		$scope.panel = 'identities';
+		$scope.addphoto = false;
 		
 		var updateUserInfo = function() {
 			UserInfoService.getUserInfo().then( function(info) {
 				$scope.userInfo = ((typeof info === 'object' && info !== null) ? info : null);
+				$scope.getUserResources();
 			});
 		}
 		updateUserInfo();
+		
+		$scope.getUserResources = function() {
+			$http({method: 'GET',
+				   url: 'http://localhost:8080/idbs-demo-webapp/getResources'})
+			.success( function(res) {
+				console.log(res);
+				$scope.resources = res;
+			});
+		}
+		
+		$scope.changePanel = function(newpanel) {
+			$scope.panel = newpanel;
+		}
+		
+		$scope.addPhoto = function(bool) {
+			$scope.addphoto = bool;
+		}
 		
 		$scope.getToken = function() {
 			$http({method: 'GET',
