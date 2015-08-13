@@ -1,5 +1,6 @@
 package org.mitre.idbs_demo.service;
 
+import org.mitre.idbs_demo.model.Photo;
 import org.mitre.idbs_demo.model.User;
 import org.mitre.idbs_demo.repository.UserRepository;
 import org.mitre.openid.connect.client.UserInfoFetcher;
@@ -45,12 +46,12 @@ public class UserInfoService {
 			
 			/* TEST DATA */
 			if( u.getUserInfo().getName().equals("Demo User") ) {
-				u.addResource("Demo User test 1");
-				u.addResource("Demo User test 2");
+				u.addResource(new Photo("http://i.imgur.com/Q4bI5.gif", "Surprised"));
+				u.addResource(new Photo("http://i.imgur.com/o7z5Y2K.gif", "Mlem Mlem"));
 			}
 			else {
-				u.addResource("Demo Admin test 1");
-				u.addResource("Demo Admin test 2");
+				u.addResource(new Photo("http://i.imgur.com/i8tiqGI.gif", "Happy Doge"));
+				u.addResource(new Photo("http://i.imgur.com/HSOeg.gif", "Hurr durr hurr"));
 			}
 			
 			repo.setCurrentUser(u);

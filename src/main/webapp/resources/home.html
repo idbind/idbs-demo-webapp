@@ -90,8 +90,15 @@
 							</div>
 						</div>
 					</div>
-					<div class="row" ng-repeat="r in resources">
-						<h4>{{r}}</h4>
+					<div class="row">
+						<div class="col-sm-3" ng-repeat="r in resources">
+							<div class="thumbnail">
+								<img ng-src="{{r.url}}">
+								<div class="caption">
+									<h3>{{r.caption}}</h3>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				

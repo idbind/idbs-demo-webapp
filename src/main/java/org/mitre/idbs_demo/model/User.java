@@ -10,13 +10,13 @@ public class User {
 	private String subject;
 	private String issuer;
 	private UserInfo info;
-	private List<String> resources;
+	private List<Photo> resources;
 	
 	public User(String subject, String issuer, UserInfo info) {
 		this.subject = subject;
 		this.issuer = issuer;
 		this.info = info;
-		resources = new ArrayList<String>();
+		resources = new ArrayList<Photo>();
 	}
 	
 	public String getSubject() {
@@ -38,11 +38,11 @@ public class User {
 	}
 	
 	/* RESOURCE METHODS */
-	public void addResource(String s) {
-		resources.add(s);
+	public void addResource(Photo p) {
+		resources.add(p);
 	}
 	
-	public List<String> getResources() {
+	public List<Photo> getResources() {
 		return resources;
 	}
 }

@@ -3,6 +3,7 @@ package org.mitre.idbs_demo.web;
 import java.util.List;
 
 import org.mitre.idbs_demo.model.Identity;
+import org.mitre.idbs_demo.model.Photo;
 import org.mitre.idbs_demo.model.TokenResponse;
 import org.mitre.idbs_demo.service.AuthTokenService;
 import org.mitre.idbs_demo.service.BoundIdentityService;
@@ -77,7 +78,7 @@ public class HomeController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/getResources", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getResources() {
+	public List<Photo> getResources() {
 		
 		return resourceService.getResources();
 	}
@@ -85,7 +86,7 @@ public class HomeController {
 	@RequestMapping(value = "/addPhoto", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String addPhoto(@RequestParam("url") String url, @RequestParam("caption") String caption) {
 		
-		resourceService.addPhoto(url+" "+caption);
+		resourceService.addPhoto(url, caption);
 		return "/resources/home.html";
 	}
 }
