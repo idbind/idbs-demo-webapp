@@ -1,5 +1,9 @@
 package org.mitre.idbs_demo.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mitre.idbs_demo.model.Identity;
 import org.mitre.idbs_demo.model.Photo;
 import org.mitre.idbs_demo.model.User;
 import org.mitre.idbs_demo.repository.UserRepository;
@@ -14,17 +18,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserInfoService {
+public class UserService {
 	
 	//TODO: this is only a band-aid
 	@Autowired
 	private DynamicServerConfigurationService serverConfigService;
 	
+	@Autowired
+	private BoundIdentityService identityService;
+	
 	private UserInfoFetcher fetcher = new UserInfoFetcher();
 	
 	private UserRepository repo = UserRepository.getInstance();
 	
-	public UserInfo getUserInfo() {
+	public User getCurrentUser() {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -46,16 +53,29 @@ public class UserInfoService {
 			
 			/* TEST DATA */
 			if( u.getUserInfo().getName().equals("Demo User") ) {
-				u.addResource(new Photo("http://i.imgur.com/Q4bI5.gif", "Surprised"));
-				u.addResource(new Photo("http://i.imgur.com/o7z5Y2K.gif", "Mlem Mlem"));
+				u.addResource(new Photo("http://i.imgur.com/Q4bI5.gif", "Surprised", "Demo User"));
+				u.addResource(new Photo("http://i.imgur.com/o7z5Y2K.gif", "Mlem Mlem", "Demo User"));
 			}
 			else {
-				u.addResource(new Photo("http://i.imgur.com/i8tiqGI.gif", "Happy Doge"));
-				u.addResource(new Photo("http://i.imgur.com/HSOeg.gif", "Hurr durr hurr"));
+				u.addResource(new Photo("http://i.imgur.com/i8tiqGI.gif", "Happy Doge", "Demo Admin"));
+				u.addResource(new Photo("http://i.imgur.com/HSOeg.gif", "Hurr durr hurr", "Demo Admin"));
 			}
 			
 			repo.setCurrentUser(u);
-			return info;
+			return u;
 		}
+	}
+	
+	public List<User> getBoundUsers() {
+		
+		List<Identity> ids = identityService.getIdentities();
+		List<User> boundUsers = new ArrayList<User>();
+		
+		for( Identity id : ids ) {
+			User u = repo.getUserBySubjectIssuer(id.getSubject(), id.getIssuer());
+			if( u != null && !u.equals(repo.getCurrentUser()) ) boundUsers.add(u);
+		}
+		
+		return boundUsers;
 	}
 }

@@ -45,4 +45,10 @@ public class User {
 	public List<Photo> getResources() {
 		return resources;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		User u = (User) obj;
+		return (this.subject.equals(u.getSubject()) && this.issuer.equals(u.getIssuer()));
+	}
 }

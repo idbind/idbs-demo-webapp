@@ -25,13 +25,36 @@
 					</h4>
 					<h4>
 						<span class="glyphicon glyphicon-picture sidepanel-glyph"></span><a ng-click="changePanel('photos')" class="btn-link sidepanel-link">Photos</a>
-						<span class="badge pull-right">4</span>
+						<span class="badge pull-right">{{resources.length}}</span>
 					</h4>
 				</div>
 			</div>
 			<div class="col-sm-10">
-				<div ng-show="userInfo && panel == 'identities'" class="well">
-					<h2>Welcome, {{userInfo.name}}!</h2>
+				<div ng-show="viewBoundUsers" class="well">
+					<div class="row">	
+						<div class="col-sm-1">
+							<h2><span class="glyphicon glyphicon-exclamation-sign pull-right"></span></h2>
+						</div>
+						<div class="col-sm-11">	
+							<h3>Detected {{boundUsers.length}} other users bound to this account:</h3>
+							<ul class="list-unstyled bound-users-list">
+								<li ng-repeat="u in boundUsers">
+									<h4 class="text-primary">{{u.userInfo.name}}</h4>
+									<h5 class="text-muted">{{u.subject}} @ {{u.issuer}}</h5>
+								</li>
+							</ul>
+							<h3>Show their content?</h3>
+							<div class="row" style="margin-left: 0px;">
+								<button ng-click="boundUsersResponse(true)" class="btn btn-success">Yes</button>
+								<button ng-click="boundUsersResponse(false)" class="btn btn-danger">Not now</button>
+							</div>
+							<h5>Note: This behavior can be configured later in the "Identities" tab.</h5>
+						</div>
+					</div>
+				</div>
+				
+				<div ng-show="currentUser && panel == 'identities'" class="well">
+					<h2>Welcome, {{currentUser.userInfo.name}}!</h2>
 					<h4>Click the button below to reveal your associated identities.</h4>
 					<div class="row">
 						<div class="col-sm-12 text-center">
@@ -55,7 +78,7 @@
 					</div>
 				</div>
 				
-				<div ng-show="userInfo && panel == 'photos'" class="well">
+				<div ng-show="currentUser && panel == 'photos'" class="well">
 					<h2>Your Photos<a ng-click="addPhoto(true)" class="btn pull-right"><span class="glyphicon glyphicon-plus"></span></a></h2>
 					<div ng-show="addphoto" class="row">
 						<div class="col-sm-6 col-sm-offset-3">
@@ -96,13 +119,15 @@
 								<img ng-src="{{r.url}}">
 								<div class="caption">
 									<h3>{{r.caption}}</h3>
+									<h4 ng-show="showBoundUserContent">From {{r.author}}</h4>
+									<h5>{{r.dateAdded}}</h5>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				
-				<div ng-hide="userInfo" class='well'>
+				<div ng-hide="currentUser" class='well'>
 					<div class="row">
 						<div class="col-sm-12">
 							<h2>You are not logged in</h2>

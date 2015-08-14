@@ -1,6 +1,8 @@
 package org.mitre.idbs_demo.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.mitre.idbs_demo.model.Identity;
 import org.mitre.idbs_demo.model.TokenResponse;
@@ -36,7 +38,7 @@ public class BoundIdentityService {
 	@Value( "${idbsQueryParams.subject}" )
 	private String subjectParam;
 	
-	public Identity[] getIdentities() {
+	public List<Identity> getIdentities() {
 		
 		TokenResponse authToken = TokenRepository.getInstance().retrieveToken(tokenKey);
 		
@@ -58,6 +60,6 @@ public class BoundIdentityService {
 		ResponseEntity<Identity[]> result = restTemplate.exchange(queryEndpoint, HttpMethod.POST, requestEntity, Identity[].class);
 		
 		System.out.println(result.getStatusCode() + "\n" + result.getBody().toString() + "\n" + result.toString());
-		return result.getBody();
+		return new ArrayList<Identity>(Arrays.asList(result.getBody()));
 	}
 }

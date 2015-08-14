@@ -5,10 +5,11 @@ import java.util.List;
 import org.mitre.idbs_demo.model.Identity;
 import org.mitre.idbs_demo.model.Photo;
 import org.mitre.idbs_demo.model.TokenResponse;
+import org.mitre.idbs_demo.model.User;
 import org.mitre.idbs_demo.service.AuthTokenService;
 import org.mitre.idbs_demo.service.BoundIdentityService;
 import org.mitre.idbs_demo.service.ResourceService;
-import org.mitre.idbs_demo.service.UserInfoService;
+import org.mitre.idbs_demo.service.UserService;
 import org.mitre.openid.connect.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +42,7 @@ public class HomeController {
 	@Autowired
 	private BoundIdentityService identityService;
 	@Autowired
-	private UserInfoService userInfoService;
+	private UserService userService;
 	@Autowired
 	private ResourceService resourceService;
 	
@@ -63,17 +64,17 @@ public class HomeController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getIdentities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Identity[] getBoundIdentities() {
+	@RequestMapping(value = "/getBoundUsers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<User> getBoundUsers() {
 		
-		return identityService.getIdentities();
+		return userService.getBoundUsers();
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getUserInfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserInfo getUserInfo() {
+	@RequestMapping(value = "/getUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public User getCurrentUser() {
 		
-		return userInfoService.getUserInfo();
+		return userService.getCurrentUser();
 	}
 	
 	@ResponseBody
@@ -84,9 +85,9 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/addPhoto", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String addPhoto(@RequestParam("url") String url, @RequestParam("caption") String caption) {
+	public String addPhoto(@RequestParam("url") String url, @RequestParam("caption") String caption, @RequestParam("author") String author) {
 		
-		resourceService.addPhoto(url, caption);
+		resourceService.addPhoto(url, caption, author);
 		return "/resources/home.html";
 	}
 }

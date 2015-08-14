@@ -18,8 +18,8 @@ public class ResourceService {
 		return UserRepository.getInstance().getCurrentUser().getResources();
 	}
 	
-	public void addPhoto(String url, String caption) {
+	public void addPhoto(String url, String caption, String author) {
 		
-		UserRepository.getInstance().getCurrentUser().addResource(new Photo(url, caption));
+		UserRepository.getInstance().getCurrentUser().addResource(new Photo(url, caption, author));
 	}
 }
