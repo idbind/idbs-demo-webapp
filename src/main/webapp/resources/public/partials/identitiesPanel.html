@@ -1,0 +1,63 @@
+<div ng-show="currentUser && panel == 'identities'" class="well">
+	<h2>Your Identities</h2>
+	<h4>Use this page to view your known identities. You can choose to show or hide their content with the checkbox.</h4>
+	
+	<h3 style="margin-top: 30px;">Logged in as:</h3>
+	<div class="row">		
+		<div class="col-sm-7">
+			<div class="row identity-block">
+				<div class="col-sm-9">
+					<h3 class="text-primary">{{currentUser.userInfo.name}}</h3>
+					<h5 class="text-muted">{{currentUser.subject}} @ {{currentUser.issuer}}</h5>
+				</div>
+				<div class="col-sm-3">
+					<h3 class="pull-right">{{currentUser.resources.length}} photos</h3>
+					<h4 class="pull-right text-muted" style="margin-top: 0px;">(Shown by default)</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<h3>Other identities:</h3>
+	<h4>These are all the identities discovered by the Identity Binding Service.</h4>
+	<div class="row">
+		<div class="col-sm-7">
+			<div class="row identity-block" ng-repeat="u in boundUsers">
+				<div class="col-sm-9">
+					<h3 class="text-primary">{{u.userInfo.name}}</h3>
+					<h5 class="text-muted">{{u.subject}} @ {{u.issuer}}</h5>
+				</div>
+				<div class="col-sm-3">
+					<h3 class="pull-right">{{u.resources.length}} photos</h3>
+					<div class="checkbox pull-right">
+						<h4 style="margin-top: 0px;"><label>
+							<input type="checkbox" value="" ng-model="u.showContent" ng-change="updateResources(u)"> Show content?
+						</label></h4>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <h2>Welcome, {{currentUser.userInfo.name}}!</h2>
+	<h4>Click the button below to reveal your associated identities.</h4>
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<button class="btn btn-primary" ng-click="getToken()">Get identities</button>
+		</div>
+	</div>
+	<div ng-show="identities.length" class="row">
+		<div class="col-sm-12">
+			<table class="table table-striped">
+				<thead></thead>
+				<tbody>
+					<tr ng-repeat="i in identities">
+						<td>
+							<h3 class="text-primary">{{i.subject}}</h3>
+							<h4>{{i.issuer}}</h4>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div> -->
+</div>
