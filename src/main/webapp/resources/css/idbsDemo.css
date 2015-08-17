@@ -24,3 +24,16 @@ body {
 	padding-left: 20px;
 	margin-top: 20px;
 }
+
+.identity-block {
+	margin-left: 0px;
+	margin-top: 5px;
+	background-color: #DDD;
+}
+
+.checkbox {
+    position: relative;
+    display: block;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}

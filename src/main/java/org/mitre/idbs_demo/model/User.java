@@ -11,12 +11,14 @@ public class User {
 	private String issuer;
 	private UserInfo info;
 	private List<Photo> resources;
+	private boolean showContent;
 	
 	public User(String subject, String issuer, UserInfo info) {
 		this.subject = subject;
 		this.issuer = issuer;
 		this.info = info;
 		resources = new ArrayList<Photo>();
+		showContent = false;
 	}
 	
 	public String getSubject() {
@@ -44,6 +46,14 @@ public class User {
 	
 	public List<Photo> getResources() {
 		return resources;
+	}
+	
+	public boolean getShowContent() {
+		return showContent;
+	}
+	
+	public void setShowContent(boolean showContent) {
+		this.showContent = showContent;
 	}
 	
 	@Override

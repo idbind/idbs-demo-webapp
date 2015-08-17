@@ -1,7 +1,6 @@
  var idbsDemo = angular.module('idbsDemo', [])
 	.config(function($httpProvider) {
 		$httpProvider.defaults.transformRequest = [function(obj) {
-			//return obj === undefined ? obj : $.param(obj);
 			var query = '';
 			var name, value;
 			for(name in obj) {
@@ -15,21 +14,20 @@
 	})
 	.controller('IdbsDemoController', ['$scope', '$http', 'UserInfoService', function($scope, $http, UserInfoService) {
 		
-		//var tokenResponse = {};
-		$scope.boundUsers = null;
+		$scope.boundUsers = [];
 		$scope.currentUser = null;
 		$scope.viewBoundUsers = false;
-		$scope.showBoundUserContent = false;
-		//$scope.userInfo = null;
-		$scope.resources = null;
+		$scope.resources = [];
 		$scope.panel = 'identities';
 		$scope.addphoto = false;
 		
 		var fetchUserInfo = function() {
 			UserInfoService.getUserInfo().then( function(user) {
 				$scope.currentUser = ((typeof user === 'object' && user !== null) ? user : null);
-				$scope.getUserResources();
-				$scope.getBoundUsers();
+				if( $scope.currentUser ) {
+					$scope.getUserResources();
+					$scope.getBoundUsers();
+				}
 			});
 		}
 		fetchUserInfo();
@@ -44,10 +42,11 @@
 			if(response) {
 				var temp = $scope.resources;
 				for(var i=0; i<$scope.boundUsers.length; i++) {
+					if($scope.boundUsers[i].showContent) continue;
 					temp = temp.concat($scope.boundUsers[i].resources);
+					$scope.boundUsers[i].showContent = true;
 				}
 				$scope.resources = temp;
-				$scope.showBoundUserContent = true;
 			}
 		}
 		
@@ -60,6 +59,23 @@
 			});
 		}
 		
+		$scope.updateResources = function(user) {
+			if(user.showContent) {
+				var temp = $scope.resources;
+				temp = temp.concat(user.resources);
+				$scope.resources = temp;
+			}
+			else {
+				var newResources = [];
+				for(var i=0; i<$scope.resources.length; i++) {
+					if( $scope.resources[i].author !== user.userInfo.name ) {
+						newResources.push( $scope.resources[i] );
+					}
+				}
+				$scope.resources = newResources;
+			}
+		}
+		
 		$scope.changePanel = function(newpanel) {
 			$scope.panel = newpanel;
 		}
@@ -67,19 +83,6 @@
 		$scope.addPhoto = function(bool) {
 			$scope.addphoto = bool;
 		}
-		
-		/*$scope.getToken = function() {
-			$http({method: 'GET',
-				   url: 'http://localhost:8080/idbs-demo-webapp/getToken'})
-			.success( function(res) {
-				tokenResponse = res;
-				console.log(res);
-				getResponse();
-			})
-			.error( function(err) {
-				console.log(err);
-			})
-		}*/
 		
 		var getToken = function() {
 			console.log('Getting token');
@@ -91,21 +94,7 @@
 			return promise;
 		}
 		
-		/*var getResponse = function() {
-			$http({method: 'GET',
-				   url: 'http://localhost:8080/idbs-demo-webapp/getIdentities'})
-			.success( function(res) {
-				console.log(res);
-				$scope.identities = res;
-				//$scope.userInfo = UserInfoService.getUserInfo();
-			})
-			.error( function(err) {
-				console.log(err);
-			})
-		}*/
-		
 		$scope.getBoundUsers = function() {
-			//var promise;
 			getToken().then( function(token) {
 				console.log('Got token - ' + token);
 				console.log('Fetching identities');
@@ -116,10 +105,5 @@
 								handleBoundUsers();
 							});
 			});
-			//return promise;
 		}
-		
-		/*getBoundUsers().then( function() {
-			console.log('Bound user(s) found: ' + $scope.boundUsers);
-		});*/
 	}]);
