@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,10 +85,11 @@ public class HomeController {
 		return resourceService.getResources();
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/addPhoto", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String addPhoto(@RequestParam("url") String url, @RequestParam("caption") String caption, @RequestParam("author") String author) {
+	public void addPhoto(@RequestParam("url") String url, @RequestParam("caption") String caption) {
 		
-		resourceService.addPhoto(url, caption, author);
-		return "/resources/home.html";
+		resourceService.addPhoto(url, caption);
+		//return "/resources/home.html";
 	}
 }

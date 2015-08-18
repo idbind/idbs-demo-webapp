@@ -19,7 +19,9 @@
 		$scope.viewBoundUsers = false;
 		$scope.resources = [];
 		$scope.panel = 'identities';
-		$scope.addphoto = false;
+		$scope.showPhotoBox = false;
+		$scope.photoFormData = {};
+		var nonCurrentUserResources = [];
 		
 		var fetchUserInfo = function() {
 			UserInfoService.getUserInfo().then( function(user) {
@@ -43,10 +45,10 @@
 				var temp = $scope.resources;
 				for(var i=0; i<$scope.boundUsers.length; i++) {
 					if($scope.boundUsers[i].showContent) continue;
-					temp = temp.concat($scope.boundUsers[i].resources);
+					nonCurrentUserResources = nonCurrentUserResources.concat($scope.boundUsers[i].resources);
 					$scope.boundUsers[i].showContent = true;
 				}
-				$scope.resources = temp;
+				$scope.resources = temp.concat(nonCurrentUserResources);
 			}
 		}
 		
@@ -55,24 +57,24 @@
 				   url: 'http://localhost:8080/idbs-demo-webapp/getResources'})
 			.success( function(res) {
 				console.log(res);
-				$scope.resources = res;
+				$scope.resources = nonCurrentUserResources.concat(res);
 			});
 		}
 		
 		$scope.updateResources = function(user) {
 			if(user.showContent) {
-				var temp = $scope.resources;
+				var temp = nonCurrentUserResources;
 				temp = temp.concat(user.resources);
-				$scope.resources = temp;
+				nonCurrentUserResources = temp;
 			}
 			else {
 				var newResources = [];
-				for(var i=0; i<$scope.resources.length; i++) {
-					if( $scope.resources[i].author !== user.userInfo.name ) {
-						newResources.push( $scope.resources[i] );
+				for(var i=0; i<nonCurrentUserResources.length; i++) {
+					if( nonCurrentUserResources[i].author !== user.userInfo.name ) {
+						newResources.push( nonCurrentUserResources[i] );
 					}
 				}
-				$scope.resources = newResources;
+				nonCurrentUserResources = newResources;
 			}
 		}
 		
@@ -80,8 +82,21 @@
 			$scope.panel = newpanel;
 		}
 		
-		$scope.addPhoto = function(bool) {
-			$scope.addphoto = bool;
+		$scope.showAddPhotoBox = function(bool) {
+			$scope.showPhotoBox = bool;
+		}
+		
+		$scope.addPhoto = function() {
+			//if($scope.photoUrl === '' || $scope.photoCaption === '') return;
+			/*var photo = {url: $scope.photoUrl,
+						 caption: $scope.photoCaption,}*/
+			$http({method: 'POST',
+				   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				   data: $scope.photoFormData,
+				   url: 'http://localhost:8080/idbs-demo-webapp/addPhoto'})
+			.then( function(res) {
+				$scope.getUserResources();
+			});
 		}
 		
 		var getToken = function() {
