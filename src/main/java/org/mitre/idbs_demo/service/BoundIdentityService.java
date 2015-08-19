@@ -26,6 +26,9 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class BoundIdentityService {
 	
+	@Value( "${app.rootUrl}" )
+	private String rootUrl;
+	
 	@Value( "${idbsQueryEndpoint}" )
 	private String queryEndpoint;
 	
@@ -57,7 +60,7 @@ public class BoundIdentityService {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		ResponseEntity<Identity[]> result = restTemplate.exchange(queryEndpoint, HttpMethod.POST, requestEntity, Identity[].class);
+		ResponseEntity<Identity[]> result = restTemplate.exchange(rootUrl+queryEndpoint, HttpMethod.POST, requestEntity, Identity[].class);
 		
 		System.out.println(result.getStatusCode() + "\n" + result.getBody().toString() + "\n" + result.toString());
 		return new ArrayList<Identity>(Arrays.asList(result.getBody()));

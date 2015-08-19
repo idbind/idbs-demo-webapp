@@ -54,7 +54,7 @@
 		
 		$scope.getUserResources = function() {
 			$http({method: 'GET',
-				   url: 'http://localhost:8080/idbs-demo-webapp/getResources'})
+				   url: 'getResources'})
 			.success( function(res) {
 				console.log(res);
 				$scope.resources = nonCurrentUserResources.concat(res);
@@ -76,6 +76,7 @@
 				}
 				nonCurrentUserResources = newResources;
 			}
+			$scope.resources = nonCurrentUserResources.concat($scope.currentUser.resources);
 		}
 		
 		$scope.changePanel = function(newpanel) {
@@ -93,7 +94,7 @@
 			$http({method: 'POST',
 				   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				   data: $scope.photoFormData,
-				   url: 'http://localhost:8080/idbs-demo-webapp/addPhoto'})
+				   url: 'addPhoto'})
 			.then( function(res) {
 				$scope.getUserResources();
 			});
@@ -102,7 +103,7 @@
 		var getToken = function() {
 			console.log('Getting token');
 			var promise = $http({method: 'GET',
-								 url: 'http://localhost:8080/idbs-demo-webapp/getToken'})
+								 url: 'getToken'})
 							.then( function(res) {
 								return res.data;
 							});
@@ -114,7 +115,7 @@
 				console.log('Got token - ' + token);
 				console.log('Fetching identities');
 				$http({method: 'GET',
-								 url: 'http://localhost:8080/idbs-demo-webapp/getBoundUsers'})
+								 url: 'getBoundUsers'})
 							.then( function(res) {
 								$scope.boundUsers = res.data;
 								handleBoundUsers();

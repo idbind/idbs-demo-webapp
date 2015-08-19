@@ -1,9 +1,11 @@
 angular.module('loginModule', [])
 	.controller('LoginCtrl', ['$scope', '$http', function($scope, $http) {
 		
+		$scope.idp = '';
+		
 		$scope.login = function() {
 			$http({method: 'GET',
-				   url: 'http://localhost:8080/idbs-demo-webapp/openid_connect_login',
+				   url: 'openid_connect_login',
 				   headers: {
 					   'Content-Type': 'application/x-www-form-urlencoded'
 				   },

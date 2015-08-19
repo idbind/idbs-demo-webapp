@@ -33,10 +33,10 @@ public class HomeController {
 	@Value( "${client.scope}" )
 	private String clientScope;
 	
-	@Value( "${idbsQuery.issuer}" )
+	/*@Value( "${idbsQuery.issuer}" )
 	private String issuer;
 	@Value( "${idbsQuery.subject}" )
-	private String subject;
+	private String subject;*/
 	
 	@Autowired
 	private AuthTokenService tokenService;

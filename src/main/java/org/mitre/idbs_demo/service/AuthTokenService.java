@@ -16,18 +16,18 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AuthTokenService {
 	
+	@Value( "${app.rootUrl}" )
+	private String rootUrl;
+	
 	@Value( "${tokenEndpoint}" )
 	private String tokenEndpoint;
 	
 	@Value( "${clientParams.id}" )
 	private String idParam;
-	
 	@Value( "${clientParams.secret}" )
 	private String secretParam;
-	
 	@Value( "${clientParams.grantType}" )
 	private String grantParam;
-	
 	@Value( "${clientParams.scope}" )
 	private String scopeParam;
 	
@@ -49,7 +49,7 @@ public class AuthTokenService {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		ResponseEntity<TokenResponse> result = restTemplate.exchange(tokenEndpoint, HttpMethod.POST, requestEntity, TokenResponse.class);
+		ResponseEntity<TokenResponse> result = restTemplate.exchange(rootUrl+tokenEndpoint, HttpMethod.POST, requestEntity, TokenResponse.class);
 		
 		TokenRepository.getInstance().saveToken(tokenKey, result.getBody());
 		System.out.println(result.getBody());
