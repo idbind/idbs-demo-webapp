@@ -18,6 +18,8 @@ public class AuthTokenService {
 	
 	@Value( "${app.rootUrl}" )
 	private String rootUrl;
+	@Value( "${idp.rootUrl}" )
+	private String idpUrl;
 	
 	@Value( "${tokenEndpoint}" )
 	private String tokenEndpoint;
@@ -49,7 +51,7 @@ public class AuthTokenService {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		ResponseEntity<TokenResponse> result = restTemplate.exchange(rootUrl+tokenEndpoint, HttpMethod.POST, requestEntity, TokenResponse.class);
+		ResponseEntity<TokenResponse> result = restTemplate.exchange(idpUrl+tokenEndpoint, HttpMethod.POST, requestEntity, TokenResponse.class);
 		
 		TokenRepository.getInstance().saveToken(tokenKey, result.getBody());
 		System.out.println(result.getBody());

@@ -9,7 +9,7 @@ public class Photo {
 	private String url;
 	private String caption;
 	private String author;
-	private Date dateAdded;
+	private String dateAdded;
 	
 	private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	
@@ -17,8 +17,11 @@ public class Photo {
 		this.url = url;
 		this.caption = caption;
 		this.author = author;
-		this.dateAdded = new Date();
+		this.dateAdded = dateFormat.format(new Date());
 	}
+	
+	/* For JSON mapping */
+	public Photo() {}
 	
 	public String getUrl() {
 		return url;
@@ -33,6 +36,17 @@ public class Photo {
 	}
 	
 	public String getDateAdded() {
-		return dateFormat.format(dateAdded);
+		return dateAdded;
+	}
+	
+	@Override
+	public String toString() {
+		return "URL: "+url+"\nCaption: "+caption+"\nAuthor: "+author+"\nDate: "+dateAdded;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Photo p = (Photo)obj;
+		return (p.url.equals(url) && p.caption.equals(caption) && p.author.equals(author) && p.dateAdded.equals(dateAdded));
 	}
 }

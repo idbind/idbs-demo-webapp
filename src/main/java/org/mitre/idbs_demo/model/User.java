@@ -43,6 +43,10 @@ public class User {
 	public void addResource(Photo p) {
 		resources.add(p);
 	}
+
+	public void deleteResource(Photo p) {
+		System.out.println(resources.remove(p));
+	}
 	
 	public List<Photo> getResources() {
 		return resources;

@@ -88,13 +88,23 @@
 		}
 		
 		$scope.addPhoto = function() {
-			//if($scope.photoUrl === '' || $scope.photoCaption === '') return;
-			/*var photo = {url: $scope.photoUrl,
-						 caption: $scope.photoCaption,}*/
 			$http({method: 'POST',
 				   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				   data: $scope.photoFormData,
 				   url: 'addPhoto'})
+			.then( function(res) {
+				$scope.getUserResources();
+			});
+			$scope.showAddPhotoBox(false);
+		}
+		
+		$scope.removePhoto = function(photo) {
+			var p = angular.toJson(photo);
+			$http({method: 'DELETE',
+				   headers: {'Content-Type': 'application/json'},
+				   data: p,
+				   transformRequest: angular.identity,
+				   url: 'deletePhoto'})
 			.then( function(res) {
 				$scope.getUserResources();
 			});

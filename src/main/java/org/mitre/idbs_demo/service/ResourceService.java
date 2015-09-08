@@ -23,4 +23,10 @@ public class ResourceService {
 		User u = UserRepository.getInstance().getCurrentUser();
 		u.addResource(new Photo(url, caption, u.getUserInfo().getName()));
 	}
+	
+	public void deletePhoto(Photo p) {
+		System.out.println(p.toString());
+		User u = UserRepository.getInstance().getCurrentUser();
+		u.deleteResource(p);
+	}
 }

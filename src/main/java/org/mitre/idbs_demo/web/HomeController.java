@@ -92,4 +92,11 @@ public class HomeController {
 		resourceService.addPhoto(url, caption);
 		//return "/resources/home.html";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deletePhoto", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void deletePhoto(@RequestBody Photo p) {
+		
+		resourceService.deletePhoto(p);
+	}
 }

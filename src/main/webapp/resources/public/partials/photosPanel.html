@@ -1,10 +1,10 @@
 <div ng-show="currentUser && panel == 'photos'" class="well">
-	<h2>Your Photos<a ng-click="showAddPhotoBox(true)" class="btn pull-right"><span class="glyphicon glyphicon-plus"></span></a></h2>
+	<h2>Your Documents<a ng-click="showAddPhotoBox(true)" class="pull-right" style="cursor: pointer;"><span class="glyphicon glyphicon-plus"></span></a></h2>
 	<div ng-show="showPhotoBox" class="row">
 		<div class="col-sm-6 col-sm-offset-3">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h4>Add a photo</h4>
+					<h4>Add a document</h4>
 				</div>
 				<div class="panel-body">
 					<form class="form-horizontal" ng-submit="addPhoto()" name="addPhotoForm">
@@ -59,6 +59,9 @@
 					<h3>{{r.caption}}</h3>
 					<h4>By {{r.author}}</h4>
 					<h5>{{r.dateAdded}}</h5>
+				</div>
+				<div class="row text-center" ng-show="r.author === currentUser.userInfo.name">
+					<button class="btn btn-danger" ng-click="removePhoto(r)">Remove</button>
 				</div>
 			</div>
 		</div>

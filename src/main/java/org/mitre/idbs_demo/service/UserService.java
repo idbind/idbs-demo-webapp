@@ -1,7 +1,9 @@
 package org.mitre.idbs_demo.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mitre.idbs_demo.model.Identity;
 import org.mitre.idbs_demo.model.Photo;
@@ -31,15 +33,25 @@ public class UserService {
 	
 	private UserRepository repo = UserRepository.getInstance();
 	
+	private Map<String, Photo[]> initTestData() {
+		Map<String, Photo[]> testData = new HashMap<String, Photo[]>();
+		testData.put("user", new Photo[]{new Photo("http://i.imgur.com/Q4bI5.gif", "Surprised", "Demo User"),
+				   new Photo("http://i.imgur.com/o7z5Y2K.gif", "Mlem Mlem", "Demo User")});
+		testData.put("admin", new Photo[]{new Photo("http://i.imgur.com/i8tiqGI.gif", "Happy Doge", "Demo Admin"),
+							   new Photo("http://i.imgur.com/HSOeg.gif", "Hurr durr hurr", "Demo Admin")});
+		return testData;
+	}
+	
 	public User getCurrentUser() {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
-		System.out.println("debug-"+authentication.toString());
-		
 		if(authentication == null || !(authentication instanceof OIDCAuthenticationToken)) return null;
 		else {
 			OIDCAuthenticationToken token = (OIDCAuthenticationToken) authentication;
+			
+			User curUser = repo.getUserBySubjectIssuer(token.getSub(), token.getIssuer());
+			if( curUser != null ) return curUser;
 			
 			ServerConfiguration serverConfig = serverConfigService.getServerConfiguration(token.getIssuer());
 			OIDCAuthenticationToken newToken = new OIDCAuthenticationToken(token.getIssuer(), token.getSub(),
@@ -52,13 +64,10 @@ public class UserService {
 			User u = repo.addUser(token.getSub(), token.getIssuer(), info);
 			
 			/* TEST DATA */
-			if( u.getUserInfo().getName().equals("Demo User") ) {
-				u.addResource(new Photo("http://i.imgur.com/Q4bI5.gif", "Surprised", "Demo User"));
-				u.addResource(new Photo("http://i.imgur.com/o7z5Y2K.gif", "Mlem Mlem", "Demo User"));
-			}
-			else {
-				u.addResource(new Photo("http://i.imgur.com/i8tiqGI.gif", "Happy Doge", "Demo Admin"));
-				u.addResource(new Photo("http://i.imgur.com/HSOeg.gif", "Hurr durr hurr", "Demo Admin"));
+			Map<String, Photo[]> testData = initTestData();
+			Photo[] photos = testData.get(u.getUserInfo().getPreferredUsername());
+			for( Photo p : photos ) {
+				u.addResource(p);
 			}
 			
 			repo.setCurrentUser(u);

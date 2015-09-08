@@ -5,7 +5,7 @@ idbsDemo
 			getUserInfo: function() {
 				if(!promise) {
 					promise = $http({method: 'GET',
-						   			 url: 'http://localhost:8080/idbs-demo-webapp/getUser'})
+						   			 url: 'getUser'})
 						   	  .then( function(res) {
 						   		  console.log(res);
 						   		  return res.data;

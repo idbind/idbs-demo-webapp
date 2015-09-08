@@ -59,8 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Value( "${client1.uri}" )
 	private String client1;
-	@Value( "${client2.uri}" )
-	private String client2;
 	
 	@Value( "${dynamicClient.name}" )
 	private String dynamicName;
@@ -161,7 +159,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		Map<String, RegisteredClient> clients = new HashMap<String, RegisteredClient>();
 		clients.put(client1, client);
-		clients.put(client2, client);
 		clientConfigurationService.setClients(clients);
 		
 		/*
